@@ -1,0 +1,42 @@
+{# NOTE: this macro has two functions:
+    1. to generate sidebar links (replacing the former partial:
+        -> 'partials/collection-list-item.html'
+    2. sets an active style to the sidebar list item of the current page
+  
+    TO USE:
+    - initialize at the top of sidebar.html: {% from "macros.html" import nav_link with context %}
+    - call it in the loop of the sidebar collection items list (~ line 65)
+    #}
+  
+  {% macro nav_link(napkin) %}
+  
+  {% set url = "/napkin/" + napkin._id|string %}
+  {% set name = napkin.title %}
+  {% set icon = "heroicons:pencil-solid" %}
+  
+  
+  
+  {% if request.path == url %}
+  {% set active = 'active' %}
+  {% else %}
+  {% set active = '' %}
+  {% endif %}
+  
+
+  
+
+  
+  <li class="flex row {{active}}">
+    <a class="flex object" href="{{url}}" aria-label="Object">
+      <div class="icon-label" data-id="{{ napkin._id }}" id="tpa{{ napkin._id }}">
+        <span class="iconify" data-icon="{{icon}}">
+        </span>
+      </div>
+      <span class="label">
+        {{ napkin.title}}
+      </span>
+    </a>
+  </li>
+  
+  {% endmacro %}
+  

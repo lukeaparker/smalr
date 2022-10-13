@@ -1,0 +1,119 @@
+{% extends "layouts/auth.html" %}
+
+
+
+{% block content %}
+<div class="flex">
+
+  {% block messages %}
+  {{super()}}
+  {% endblock messages %}
+</div>
+<div class="flex jumbocard" style="margin-bottom: 30%;"">
+  <div class="icon-label-large icon-label-black">
+    <span class="iconify" data-icon="bi:person-fill">
+    </span>
+  </div>
+  <h2>&nbsp;</h2>
+
+  <form action="/api/login" method="POST">
+    <div class="flex input-wrapper">
+      <span class="iconify-inline" data-icon="fluent:mail-48-regular">
+      </span>
+      <input id="email" name="email" type="email" class="input"
+        placeholder=" " />
+      <label for="email" class="label">Email <span id="error_email"
+          class="error-message text-danger"></span>
+      </label>
+    </div>
+
+
+    <div class="flex input-wrapper">
+      <span class="iconify-inline" data-icon="ri:lock-password-line"></span>
+      <input id="password" name="password" type="password" class="input"
+        placeholder=" " />
+      <label for="password" class="label">Password <span id="error_password"
+          class="error-message text-danger"></span>
+      </label>
+    </div>
+
+    <div class="flex justify">
+      <div class="row">
+        Don't have an account? <a class="text-blue" href="/register">Register</a>
+      </div>
+      <div class="spacer"></div>
+
+      <div class="row flex-end">
+        {# <input class="button muted" type="reset" onClick="clearErrors()"
+          placeholder="reset" /> #}
+        <button type="submit" class="button blue">Log in</button>
+      </div>
+    </div>
+  </form>
+
+
+</div>
+
+
+{% endblock %}
+
+{% block scripts %}
+
+<script>
+  function clearErrors() {
+    document.getElementById("error_email").innerHTML = "";
+    document.getElementById("error_password").innerHTML = "";
+  }
+</script>
+<script type="text/javascript">
+  $("#loginForm").submit(function (e) {
+    e.preventDefault();
+    $.ajax({
+      type: "POST",
+      url: "/login",
+      data: JSON.stringify(getFormData($(this))),
+      success: function (response) {
+        if ("{{LOGIN_REDIRECT_URL}}") {
+          window.location.href = "{{LOGIN_REDIRECT_URL}}";
+        } else {
+          window.location = window.location.origin;
+        }
+      },
+      error: function (jqXHR, exception) {
+        var errors = jqXHR.responseJSON.errors;
+        if (errors && "json" in errors) errors = errors.json;
+        var message = jqXHR.responseJSON.message;
+
+        if (errors) {
+          // console.log(errors);
+          // Clear current errors
+          $(".error-message").each(function () {
+            $(this).text("");
+          });
+
+          // Set error messages
+          for (const [key, value] of Object.entries(errors)) {
+            // console.log("#error_" + key);
+            $("#error_" + key).text(value[0]);
+          }
+        } else {
+          alert(message);
+        }
+      },
+      dataType: "json",
+      contentType: "application/json",
+    });
+  });
+
+  function getFormData($form) {
+    var unindexed_array = $form.serializeArray();
+    var indexed_array = {};
+
+    $.map(unindexed_array, function (n, i) {
+      indexed_array[n["name"]] = n["value"];
+    });
+
+    return indexed_array;
+  }
+</script>
+{% endblock %}

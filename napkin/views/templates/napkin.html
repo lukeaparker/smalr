@@ -1,0 +1,241 @@
+{% extends "layouts/base.html" %}
+{% block content %}
+
+  <div id="parent" style="position:absolute; width: 100%; height: 100%; overflow:hidden;">
+    <div id="container"></div>
+  </div>
+
+  <div id="hidden"></div>
+
+<style>
+
+      #marker {
+        top: 0px;
+        left: 0px;
+      }
+      #eraser {
+        top: 0px;
+        left: 0px;
+      }
+      #line {
+        top: 0px;
+        left: 0px;
+      }
+
+
+    </style>
+  <script>
+    var sceneWidth = 1000;
+    var sceneHeight = 4000;
+
+    var isPaint = false;
+    var mode = 'brush';
+    var activeColor = '#eeeeee';
+    var currentColor = '#eeeeee';
+
+    var markerButton = $('#marker');
+    var eraserButton = $('#eraser');
+    var lineButton = $('#line');
+    var colorButton = $('#color');
+
+    markerButton.on('click', function () {
+      if (!markerButton.hasClass('active')) {
+        markerButton.addClass('active');
+        if (mode === 'eraser') {
+          eraserButton.removeClass('active');
+          activeColor = currentColor;
+        } else {
+          lineButton.removeClass('active');
+        }
+        mode = 'brush';
+      }
+    });
+
+    eraserButton.on('click', function () {
+      if (!eraserButton.hasClass('active')) {
+        eraserButton.addClass('active');
+        activeColor = '#23272a';
+        if (mode === 'brush') {
+          markerButton.removeClass('active');
+        } else {
+          lineButton.removeClass('active');
+        }
+        mode = 'eraser';
+      }
+    });
+
+    lineButton.on('click', function () {
+      if (!lineButton.hasClass('active')) {
+        lineButton.addClass('active');
+        if (mode === 'brush') {
+          markerButton.removeClass('active');
+        } else {
+          eraserButton.removeClass('active');
+          activeColor = currentColor;
+        }
+        mode = 'line';
+      }
+    });
+
+    colorButton.on('change', function () {
+      if (mode !== 'eraser') {
+        activeColor = this.value;
+      }
+      currentColor = this.value;
+      console.log(activeColor);
+      console.log(currentColor);
+    });
+
+    var canvas = null;
+
+    var drawLayer = new Konva.Layer();
+
+    $.ajax({
+        async: false,
+        url: '/api/get/napkin/canvas/{{napkin._id}}',
+        type: 'GET',
+        success: function(data){
+          canvas = data;
+          if (canvas.children[0]) {
+            drawLayer = Konva.Node.create(canvas.children[0]);
+          }
+        }
+    });
+
+
+    var starterStage = {
+      width: sceneWidth,
+      height: sceneHeight,
+      container: 'container'
+    };
+
+    var stage = new Konva.Stage(starterStage);
+    stage.add(drawLayer);
+
+    var saveStage = null;
+
+
+    function save() {
+      var saveStageConfig = {
+        width: canvas.attrs.width,
+        height: canvas.attrs.height,
+        container: 'hidden'
+      };
+
+      saveStage = new Konva.Stage(saveStageConfig);
+      saveStage.add(drawLayer);
+
+      $.ajax({
+          url: '/api/update/{{napkin._id}}',
+          type: 'POST',
+          data: {'canvas': saveStage.toJSON()},
+          success: function(data) {}
+      });
+
+      $('#hidden')[0].style.display = 'none';
+
+      stage.add(drawLayer);
+    }
+
+
+
+    var lastLine = null;
+
+    stage.on('mousedown touchstart', function (e) {
+      isPaint = true;
+      var x = e.pageX - drawLayer.x();
+      var y = e.pageY - drawLayer.y();
+      var pos = { 'x': x, 'y': y };
+
+      lastLine = new Konva.Line({
+        stroke: activeColor,
+        strokeWidth: 5,
+        globalCompositeOperation:
+          mode === 'brush' || mode === 'line' ? 'source-over' : 'destination-out',
+        points: [pos.x, pos.y],
+      });
+      drawLayer.add(lastLine);
+    });
+
+    stage.on('mouseup touchend', function () {
+      isPaint = false;
+
+      if (mode !== 'line') {
+        lastLine.attrs.points = lastLine.attrs.points.slice(2, lastLine.attrs.points.length-2);
+      } else {
+        lastLine.attrs.points = lastLine.attrs.points.slice(2);
+      }
+
+      save();
+    });
+
+    // and core function - drawing
+    stage.on('mousemove touchmove', function () {
+      if (!isPaint) {
+        return;
+      }
+      if (mode !== 'line') {
+        var x = stage.getRelativePointerPosition().x - drawLayer.x();
+        var y = stage.getRelativePointerPosition().y - drawLayer.y();
+        var pos = { 'x': x, 'y': y };
+        var newPoints = lastLine.points().concat([pos.x, pos.y]);
+        lastLine.points(newPoints);
+      } else {
+        var x = stage.getRelativePointerPosition().x - drawLayer.x();
+        var y = stage.getRelativePointerPosition().y - drawLayer.y();
+        var pos = { 'x': x, 'y': y };
+        var newPoints = null;
+        if (lastLine.points().length < 3) {
+          newPoints = lastLine.points().concat([pos.x, pos.y]);
+        } else {
+          newPoints = lastLine.points().slice(0, 4).concat([pos.x, pos.y]);
+        }
+        lastLine.points(newPoints);
+      }
+    });
+
+
+    var scaleBy = 1.06;
+    stage.on('wheel', (e) => {
+      e.evt.preventDefault();
+      var oldScale = stage.scaleX();
+      var pointer = stage.getPointerPosition();
+      var mousePointTo = {
+        x: (pointer.x - stage.x()) / oldScale,
+        y: (pointer.y - stage.y()) / oldScale,
+      };
+      let direction = e.evt.deltaY > 0 ? 1 : -1;
+      if (e.evt.ctrlKey) {
+        direction = -direction;
+      }
+      var newScale = direction > 0 ? oldScale * scaleBy : oldScale / scaleBy;
+      stage.scale({ x: newScale, y: newScale });
+      var newPos = {
+        x: pointer.x - mousePointTo.x * newScale,
+        y: pointer.y - mousePointTo.y * newScale,
+      };
+      stage.position(newPos);
+    });
+
+
+    function fitStageIntoParentContainer() {
+        var container = document.querySelector('#parent');
+
+        // now we need to fit stage into parent container
+        var containerWidth = container.offsetWidth;
+
+        // but we also make the full scene visible
+        // so we need to scale all objects on canvas
+        var scale = containerWidth / sceneWidth;
+
+        stage.width(sceneWidth * scale);
+        stage.height(sceneHeight * scale);
+        stage.scale({ x: scale, y: scale });
+      }
+
+      fitStageIntoParentContainer();
+      // adapt the stage on any window resize
+      window.addEventListener('resize', fitStageIntoParentContainer);
+  </script>
+
+{% endblock content %}

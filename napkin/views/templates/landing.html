@@ -1,0 +1,26 @@
+{% extends "layouts/auth.html" %}
+
+
+
+{% block content %}
+<div class="flex">
+
+  {% block messages %}
+  {{super()}}
+  {% endblock messages %}
+</div>
+<div class="flex jumbocard" style="margin-bottom: 40%;">
+  <div class="icon-label-large icon-label-black">
+    <span class="iconify" data-icon="heroicons:pencil-solid">
+    </span>
+  </div>
+  <h2>&nbsp;</h2>
+  <h1>Welcome to Napkin</h1>
+  <p>Draw handwritten notes in the cloud, and access them from anywhere!</p>
+  <div class="row" style="padding-top: 15px;">
+
+    <a href="/login" class="button ">Login</a>
+    <a href="/register" class="button blue" style="width: 500px !important;">Register</a>
+</div>
+</div>
+{% endblock %}
