@@ -25,25 +25,25 @@ def inject_context():
 @views.route("/", methods=['GET'])
 def landing_page():
     if 'user' in session.keys() and users.users.find_one({'_id': ObjectId(session['user'])}):
-        return redirect('/index')
+        return redirect('/urls')
     return render_template('landing.html')
 
 # User registration 
 @views.route("/register", methods=['GET'])
 def register():
     if 'user' in session.keys() and users.users.find_one({'_id': ObjectId(session['user'])}):
-        return redirect('/index')
+        return redirect('/urls')
     else:
         return render_template('auth/register.html')
 
 @views.route('/login', methods=['GET'])
 def login():
     if 'user' in session.keys() and users.users.find_one({'_id': ObjectId(session['user'])}):
-        return redirect('/index')
+        return redirect('/urls')
     return render_template('/auth/login.html')
 
 # Index view         
-@views.route("/napkins")
+@views.route("/urls")
 @login_required()
 def list_view():
     all_urls = list(urls.find({'owner': session['user']}))

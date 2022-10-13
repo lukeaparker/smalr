@@ -52,7 +52,7 @@ def create():
         'destination': request.form['destination'],
         'alias': request.form['alias'] 
     })
-    return redirect(f'/napkins')
+    return redirect(f'/urls')
 
 # Update napkin 
 @api.route("/update/<_id>", methods=['POST'])
@@ -70,14 +70,7 @@ def update(_id):
 # Delete napkin
 @api.route("/delete/<_id>", methods=['GET'])
 @login_required()
-def delete_napkin(_id):
-        napkin = napkins.delete_one({'_id': ObjectId(_id)})
-        return redirect('/napkins')
-
-# Get napkin json 
-@api.route("/get/napkin/canvas/<_id>", methods=['GET'])
-@login_required()
-def get_napkin_canvas(_id):
-    napkin = napkins.find_one({'_id': ObjectId(_id)})
-    return napkin['canvas']
+def delete_url(_id):
+        napkin = urls.delete_one({'_id': ObjectId(_id)})
+        return redirect('/urls')
 
