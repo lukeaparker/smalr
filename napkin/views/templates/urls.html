@@ -1,0 +1,98 @@
+{% extends "layouts/base.html" %}
+{% block content %}
+<div class="container collections" style="margin-left: 10%; margin-right: 10%;">
+  {% if not urls %}
+  <section class= "card-header">
+    <div class="flex jumbocard" style="margin-bottom: 40%;">
+      <div class="icon-label-large icon-label-black">
+        <span class="iconify" data-icon="arcticons:urlsanitizer">
+        </span>
+      </div>
+      <h2>&nbsp;</h2>
+      <h1>No URL's Found</h1>
+      <div class="row" style="padding-top: 15px;">
+    
+      <a href="#" id="modal-create-blueprint-button"
+      class="open-modal flex object button blue">+ New URL</a>
+    </div>
+    </div>
+  </section>
+  {% else %}
+  <section class="card-header flex " style="overflow: scroll;">
+    <div class="collection-info flex">
+      <div class="icon-label-large icon-label-black">
+        <span class="iconify" data-icon="arcticons:urlsanitizer">
+        </span>
+      </div>
+      <div>
+        <h2>URL's</h2>
+      </div>
+    </div>
+  </section>
+
+
+  <section class="card-body">
+    <table class="table table-bordered table-strip">
+      <thead>
+        <tr>
+          <th>NAME</th>
+          <th>ALIAS</th>
+          <th></th>
+
+        </tr>
+      </thead>
+      <tbody>
+
+        {% for url in urls %}
+        <tr>
+          <td>
+            <div class="flex">
+              <div class="icon-label " data-id="{{ url._id }}" id="@{{ url._id }}">
+                <span class="iconify" data-icon="arcticons:urlsanitizer"></span>
+              </div>
+              <span class="attribute label">
+                {{url.name}}
+              </span>
+            </div>
+          </td>
+
+          <td>
+            <span class="attribute label">
+              {{url.alias}}
+            </span>
+          </div>
+        </td>
+
+
+
+          <td class="flex flex-end">
+
+            <a class="icon-label-pink" href="/napkin/{{url._id}}"
+            aria-label="VIEW" data-tooltip="TEST">
+            <span class="iconify" data-icon="ic:round-route"></span>
+          </a>
+          <a class="icon-label-green" href="/napkin/{{url._id}}"
+          aria-label="VIEW" data-tooltip="EDIT">
+          <span class="iconify" data-icon="ant-design:edit-outlined"></span>
+        </a>
+        <a class="icon-label-red" href="/napkin/{{url._id}}"
+        aria-label="VIEW" data-tooltip="DELETE">
+        <span class="iconify" data-icon="bx:trash"></span>
+      </a>
+          </td>
+        </tr>
+        {% endfor %}
+
+      </tbody>
+    </table>
+
+
+  </section>
+  {% endif %}
+</div>
+{% endblock %}
+
+{% block modal %}
+{{ super() }}
+
+{% endblock modal %}

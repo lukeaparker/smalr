@@ -1,0 +1,79 @@
+{% block modal %}
+
+<div class="modal" id="modal-create-blueprint">
+  <button class="close-modal" aria-label="Close">X</button>
+  <div class="modal-content">
+    <div class="collection-info flex">
+      <div class="icon-label-medium icon-label-teal">
+        <span class="iconify" data-icon="arcticons:urlsanitizer"> </span>
+      </div>
+      <div>
+        <h2>Create URL</h2>
+      </div>
+    </div>
+    <form
+      id="logblueprints"
+      action="/api/create"
+      method="POST"
+    >
+      <div class="flex input-wrapper">
+        <span
+          class="iconify iconify-inline"
+          data-icon="iconoir:input-field"
+        ></span>
+        <input
+          class="input"
+          type="text"
+          name="name"
+          placeholder=" "
+          role="presentation"
+          autocapitalize="on"
+        />
+        <label for="name" class="label">Name </label>
+      </div>
+
+      <div class="flex input-wrapper">
+        <span
+          class="iconify iconify-inline"
+          data-icon="iconoir:input-field"
+        ></span>
+        <input
+          class="input"
+          type="text"
+          name="destination"
+          placeholder=" "
+          role="presentation"
+          autocapitalize="on"
+        />
+        <label for="name" class="label">Destination </label>
+      </div>
+
+      <div class="flex input-wrapper">
+        <span
+          class="iconify iconify-inline"
+          data-icon="iconoir:input-field"
+        ></span>
+        <input
+          class="input"
+          type="text"
+          name="alias"
+          placeholder=" "
+          role="presentation"
+          autocapitalize="on"
+        />
+        <label for="name" class="label">Alias </label>
+      </div>
+
+
+   
+
+    
+
+      <div class="flex right">
+        <button class="button blue" type="submit">Save</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+{% endblock modal %}

@@ -11,14 +11,13 @@ from napkin.utils import login_required
 
 views = Blueprint('views', __name__, template_folder="templates", static_folder="static")
 users = Users(database)
-napkins = database.napkins
+urls = database.urls
 
 @views.context_processor
 def inject_context():
     if 'user' in session.keys() and users.users.find_one({'_id': ObjectId(session['user'])}):
-            all_napkins = list(napkins.find({'owner': session['user']}))
             current_user = users.users.find_one({'_id': ObjectId(session['user'])})
-            return dict(all_napkins=all_napkins, current_user=current_user)
+            return dict(current_user=current_user)
     else:
         return dict(no_session=True)
 
@@ -47,8 +46,8 @@ def login():
 @views.route("/napkins")
 @login_required()
 def list_view():
-    all_napkins = list(napkins.find({'owner': session['user']}))
-    return render_template('napkins.html', napkins=all_napkins, user=session['user'])
+    all_urls = list(urls.find({'owner': session['user']}))
+    return render_template('urls.html', urls=all_urls, user=session['user'])
 
 # Napkin detail view 
 @views.route("/napkin/<_id>")

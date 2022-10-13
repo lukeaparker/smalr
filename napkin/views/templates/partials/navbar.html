@@ -1,37 +1,8 @@
 <header>
   <!-- <div class="blur-view"></div> -->
   <nav class="navbar-top" aria-label="primary" style="width: 100%;">
-      <div class="flex actions">
-        <button class="icon-label-black" type="button" style="margin-right: 1em" id="nav-back"  onclick="history.back()">
-          <span class="iconify" data-icon="ph:caret-left-bold"></span>
-        </button>
-        <button class="icon-label-black"  type="button" id="nav-forward" onclick="history.forward()">
-          <span class="iconify" data-icon="ph:caret-right-bold"></span>
-        </button> 
-      </div>
-{% if napkin %}
-    <form action="/api/update/{{napkin._id}}" method="POST" style="width: 10rem;">
-      <input name="title" class="edit-title no-outline" type="text" value="{{napkin.title}}">
-    </form>
-    <div class="search" style="margin-left: 50%; margin-right: 50%; width: 250px;">
-    <button id="marker" style="margin-left: 1em; margin-right: 1em;">
-      <span class="iconify" data-icon="heroicons:pencil""></span>
-      </span>
-    </button>
-    <button id="eraser" style="margin-left: 1em; margin-right: 1em;">
-      <span class="iconify" data-icon="clarity:eraser-line"></span>
-      </span>
-    </button>
-    <button id="line" style="margin-left: 1em; margin-right: 1em;">
-      <span class="iconify" data-icon="ci:line-xl""></span>
-      </span>
-    </button>
-    <button id="line" style="margin-left: 1em; margin-right: 1em;">
-      <a href="/api/delete/{{napkin._id}}" style="text-decoration: none;"><span class="iconify" data-icon="bx:trash""></span></a>
-      </span>
-    </button>
-    </div>
-    {% endif %}
+
+
     <!-- <input value="#eeeeee" type="color" id="color"> -->
     {% if current_user %}
       <ul role="list" class="flex dropdown-nav align-items-start">

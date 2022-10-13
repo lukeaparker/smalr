@@ -11,7 +11,7 @@ from napkin.utils import login_required
 
 api = Blueprint('api', __name__)
 users = Users(database)
-napkins = database.napkins
+urls = database.urls
 
 @api.route('/register', methods=['POST'])
 def register():
@@ -42,20 +42,17 @@ def logout():
     return redirect('/')
 
 # Create napkin 
-@api.route("/create", methods=['GET'])
+@api.route("/create", methods=['POST'])
 @login_required()
 def create():
-    new_napkin = napkins.insert_one({
-        'title': 'Untitled Napkin',
+    new_napkin = urls.insert_one({
+        'name': request.form['name'],
         'owner': session['user'], 
         'date_created': str(date.today()),
-        'canvas': {
-            'attrs': {'height': 4000, 'width': 1000},
-            'className': 'Stage',
-            'children': []
-        }
+        'destination': request.form['destination'],
+        'alias': request.form['alias'] 
     })
-    return redirect(f'/napkin/{new_napkin.inserted_id}')
+    return redirect(f'/napkins')
 
 # Update napkin 
 @api.route("/update/<_id>", methods=['POST'])

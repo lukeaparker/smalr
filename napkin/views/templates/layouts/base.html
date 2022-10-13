@@ -29,7 +29,7 @@
     integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
     crossorigin="anonymous"
 ></script>
-  <title>Napkin</title>
+  <title>Smalr</title>
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined"
     rel="stylesheet">
   
@@ -68,12 +68,11 @@
 
 </head>
 
-<body class="auth">
+<body class="unauth">
   {% block loggedin_view %}
   {% if current_user %}
   {% endif %}
   {% include 'partials/navbar.html' %}
-  {% include 'partials/sidebar.html' %}
   {% endblock loggedin_view %}
 <main>
   {% block content %}
@@ -85,6 +84,7 @@
 
   <div class="overlay blur" role="dialog" aria-modal="true"
     aria-live="assertive">
+    {% include 'partials/modals/create-url-modal.html' %}
     {% block modal %}
 
 

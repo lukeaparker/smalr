@@ -16,6 +16,6 @@ class MongoDB():
     def load_app(self):
         """Loads the current application and makes changes to db in needed"""
         self.users = self.db.users
-        self.napkins = self.db.napkins
+        self.urls = self.db.urls
         
 database = MongoDB()

@@ -444,6 +444,10 @@ a.text-blue:hover {
   background-color: var(--neutral-darker-mid);
 }
 
+.icon-label-red {
+  background-color: var(--neutral-darker-mid);
+}
+
 .icon-label-black {
   background-color: var(--black);
 }
@@ -1010,6 +1014,8 @@ header .blur-view {
 }
 
 .navbar-top {
+  width: 100% !important;
+  margin-left: 13%; 
   display: grid;
   grid-template-columns: repeat(10, 1fr);
 }
