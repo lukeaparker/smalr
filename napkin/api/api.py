@@ -57,7 +57,7 @@ def create():
 # Update napkin 
 @api.route("/update/<_id>", methods=['POST'])
 @login_required()
-def update(_id):
+def update_url(_id):
     if 'canvas' in request.form.keys():
         canvas = json.loads(request.form['canvas'])
         napkin = napkins.update_one({'_id': ObjectId(_id)}, {'$set': {'canvas': canvas}})
