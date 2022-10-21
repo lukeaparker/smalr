@@ -29,13 +29,13 @@ def create_app(mode='default'):
         app.register_blueprint(api_blueprint, url_prefix="/api")
 
         # Register Error Pages
-        @app.errorhandler(404)
-        def err404(e):
-            return render_template('/errors/404.html', showStackTrace = True, stackTrace = str(e), errorCode = 404)
+        # @app.errorhandler(404)
+        # def err404(e):
+        #     return render_template('/errors/404.html', showStackTrace = True, stackTrace = str(e), errorCode = 404)
 
-        @app.errorhandler(500)
-        def err404(e):
-            return render_template('/errors/500.html', showStackTrace = True, stackTrace = str(e), errorCode = 500)
+        # @app.errorhandler(500)
+        # def err404(e):
+        #     return render_template('/errors/500.html', showStackTrace = True, stackTrace = str(e), errorCode = 500)
 
     return app
 

@@ -32,7 +32,7 @@ def login():
     })
     if user != False:
         session['user'] = str(user['_id'])
-        return redirect('/napkins')
+        return redirect('/urls')
     else: 
         return redirect('/login')
 
@@ -45,12 +45,12 @@ def logout():
 @api.route("/create", methods=['POST'])
 @login_required()
 def create():
-    new_napkin = urls.insert_one({
+    urls.insert_one({
         'name': request.form['name'],
         'owner': session['user'], 
         'date_created': str(date.today()),
         'destination': request.form['destination'],
-        'alias': request.form['alias'] 
+        'alias': request.form['alias']
     })
     return redirect(f'/urls')
 
@@ -58,14 +58,15 @@ def create():
 @api.route("/update/<_id>", methods=['POST'])
 @login_required()
 def update_url(_id):
-    if 'canvas' in request.form.keys():
-        canvas = json.loads(request.form['canvas'])
-        napkin = napkins.update_one({'_id': ObjectId(_id)}, {'$set': {'canvas': canvas}})
-        return 'success'
-    if 'title' in request.form.keys():
-        title = request.form['title']
-        napkin = napkins.update_one({'_id': ObjectId(_id)}, {'$set': {'title': title}})
-        return redirect(f'/napkin/{_id}')
+    updated_url = {
+        'name': request.form['name'],
+        'owner': session['user'], 
+        'date_created': str(date.today()),
+        'destination': request.form['destination'],
+        'alias': request.form['alias'] 
+    }
+    urls.update_one({'_id': ObjectId(_id)}, {'$set': updated_url})
+    return redirect(f'/urls')
 
 # Delete napkin
 @api.route("/delete/<_id>", methods=['GET'])
@@ -73,4 +74,26 @@ def update_url(_id):
 def delete_url(_id):
         napkin = urls.delete_one({'_id': ObjectId(_id)})
         return redirect('/urls')
+
+@api.route('/validate/alias', methods=['POST'])
+def validate_alias():
+    alias = list(urls.find({'alias': request.form['alias']}))
+    if alias:
+        if request.args.get('name'):
+            url = list(urls.find({'name': request.args.get('name')}))[0]
+            print(url['alias'], alias[0]['alias'])
+            if alias[0]['alias'] == url['alias']:
+                return 'True'
+        return 'False'
+    else:
+        return 'True'
+
+@api.route('/validate/name', methods=['POST'])
+def validate_name():
+    name = request.form['name']
+    url = list(urls.find({'name': name}))
+    if url:
+        return 'False' 
+    else:
+        return 'True'
 

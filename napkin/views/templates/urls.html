@@ -1,6 +1,7 @@
 {% extends "layouts/base.html" %}
 {% block content %}
-<div class="container collections" style="margin-left: 10%; margin-right: 10%;">
+<div class="container collections" style="margin-left: 10%; margin-right: 10%; min-width: 60% !important;">
+
   {% if not urls %}
   <section class= "card-header">
     <div class="flex jumbocard" style="margin-bottom: 40%;">
@@ -18,15 +19,32 @@
     </div>
   </section>
   {% else %}
-  <section class="card-header flex " style="overflow: scroll;">
+  <section
+    class="card-header flex">
     <div class="collection-info flex">
-      <div class="icon-label-large icon-label-black">
-        <span class="iconify" data-icon="arcticons:urlsanitizer">
-        </span>
+      
+
+
+
+
+      
+      <div
+        class="icon-label-black icon-label-large" style="margin-left: 50px;">
+        <span class="iconify" data-icon="arcticons:urlsanitizer"> </span>
       </div>
       <div>
         <h2>URL's</h2>
       </div>
+    </div>
+
+    <div class="actions flex">
+      <ul role="list" class="flex">
+        <li class="flex row">
+          
+          <a href="#" id="modal-create-blueprint-button"
+          class="open-modal button blue" style="margin-right: 60px;: 0;">+ New URL</a>
+        </li>
+
     </div>
   </section>
 
@@ -58,29 +76,33 @@
 
           <td>
             <span class="attribute label">
-              {{url.alias}}
+              {{host_url}}/r/{{url.alias}}
             </span>
           </div>
         </td>
 
 
 
-          <td class="flex flex-end">
+          <td class="flex flex-end" style="z-index: -300;">
 
-            <a class="icon-label-pink" href="/napkin/{{url._id}}"
-            aria-label="VIEW" data-tooltip="TEST">
+            <a class="icon-label-pink" href="/r/{{url.alias}}"
+            aria-label="VIEW">
             <span class="iconify" data-icon="ic:round-route"></span>
           </a>
-          <a class="icon-label-green" href="/napkin/{{url._id}}"
-          aria-label="VIEW" data-tooltip="EDIT">
+          <a class="icon-label-green open-modal" href="#"
+          id="modal-edit-url-{{url._id}}-button" aria-label="VIEW">
           <span class="iconify" data-icon="ant-design:edit-outlined"></span>
         </a>
+
+
+
         <a class="icon-label-red" href="/api/delete/{{url._id}}"
-        aria-label="VIEW" data-tooltip="DELETE">
+        aria-label="VIEW">
         <span class="iconify" data-icon="bx:trash"></span>
       </a>
           </td>
         </tr>
+
         {% endfor %}
 
       </tbody>
@@ -88,11 +110,21 @@
 
 
   </section>
+
+
+  
   {% endif %}
+
+
+
+
+
 </div>
 {% endblock %}
 
 {% block modal %}
 {{ super() }}
-
+{% for url in urls %}
+{% include 'partials/modals/edit-url-modal.html' %}
+{% endfor %}
 {% endblock modal %}

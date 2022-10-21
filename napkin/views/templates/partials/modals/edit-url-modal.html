@@ -1,6 +1,6 @@
 {% block modal %}
 
-<div class="modal" id="modal-create-blueprint">
+<div class="modal" id="modal-edit-url-{{url._id}}">
   <button class="close-modal" aria-label="Close">X</button>
   <div class="modal-content">
     <div class="collection-info flex">
@@ -8,12 +8,12 @@
         <span class="iconify" data-icon="arcticons:urlsanitizer"> </span>
       </div>
       <div>
-        <h2>Create URL</h2>
+        <h2>Edit URL</h2>
       </div>
     </div>
     <form
-      id="logblueprints"
-      action="/api/create"
+      id="editURL"
+      action="/api/update/{{url._id}}"
       method="POST"
     >
       <div class="flex input-wrapper">
@@ -28,6 +28,7 @@
           placeholder=" "
           role="presentation"
           autocapitalize="on"
+          value="{{url.name}}"
         />
         <label for="name" class="label">Name </label>
       </div>
@@ -44,9 +45,11 @@
           placeholder=" "
           role="presentation"
           autocapitalize="on"
+          value="{{url.destination}}"
         />
         <label for="name" class="label">Destination </label>
       </div>
+
 
       <div class="flex input-wrapper">
         <span
@@ -58,23 +61,27 @@
         <input
           class="input"
           type="text"
-          id="alias"
+          id="alias{{url._id}}"
           name="alias"
           placeholder=" "
           role="presentation"
           autocapitalize="on"
-          oninput="handleValueChangeAlias('alias')"
+          value="{{url.alias}}"
+          oninput="handleValueChangeAlias{{url._id}}('alias{{url._id}}')"
         />
         <label for="name" class="label">Alias </label>
       </div>
-      <div id="error-alias" style="height: 10px; color: rgb(255, 81, 81);"></div>
+      <div id="error{{url._id}}" style="height: 10px; color: rgb(255, 81, 81);"></div>
+
+
+
 
    
 
     
 
       <div class="flex right">
-        <button id="create_submit" class="button blue" type="submit">Save</button>
+        <button id="edit_submit_{{url._id}}" class="button blue" type="submit">Save</button>
       </div>
     </form>
   </div>
@@ -82,27 +89,29 @@
 
 <script>
 
-    function handleValueChangeAlias(id) { 
+    function handleValueChangeAlias{{url._id}}(id) { 
         
         var aliasValue = document.getElementById(id).value 
         $.ajax({
-          url: '/api/validate/alias',
+          url: '/api/validate/alias?name={{url.name}}',
           type: 'POST',
           data: {'alias': aliasValue},
           success: function(data) {
             if (data == 'True') {
-                $('#error-alias').empty();
-                $("#create_submit").css("background","rgb(33, 150, 243)");
-                $("#create_submit").attr("disabled", false);
+                $('#error{{url._id}}').empty();
+                $("#edit_submit_{{url._id}}").css("background","rgb(33, 150, 243)");
+                $("#edit_submit_{{url._id}}").attr("disabled", false);
 
             } else {
                 console.log('no good')
-                document.getElementById('error-alias').innerHTML="This alias has already been assigned";
-                $("#create_submit").css("background","grey");
-                $("#create_submit").attr("disabled", true);       
+                document.getElementById('error{{url._id}}').innerHTML="This alias has already been assigned";
+                $("#edit_submit_{{url._id}}").css("background","grey");
+                $("#edit_submit_{{url._id}}").attr("disabled", true);       
             }}
       });
     }
   </script>
+
+  
 
 {% endblock modal %}

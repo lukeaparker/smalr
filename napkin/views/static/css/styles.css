@@ -444,10 +444,6 @@ a.text-blue:hover {
   background-color: var(--neutral-darker-mid);
 }
 
-.icon-label-red {
-  background-color: var(--neutral-darker-mid);
-}
-
 .icon-label-black {
   background-color: var(--black);
 }
@@ -702,7 +698,7 @@ aside {
 header {
   /* --bg-color: rgb(1, 88, 105); */
   min-height: 50px;
-  width: max(850px, calc(100vw - var(--sidebar-width)));
+ 
   position: sticky;
   align-self: start;
   top: 0;
@@ -1015,9 +1011,9 @@ header .blur-view {
 
 .navbar-top {
   width: 100% !important;
-  margin-left: 13%; 
   display: grid;
   grid-template-columns: repeat(10, 1fr);
+  background-color: transparent;
 }
 
 .navbar-top select,
@@ -1137,7 +1133,7 @@ aside h1 {
 
 [data-tooltip] {
   position: relative;
-  z-index: 100000;
+  z-index: 10;
 }
 
 [data-tooltip]::after {
@@ -1165,7 +1161,7 @@ aside h1 {
 
   transform: scale(0);
   transition: transform ease-in-out 50ms;
-  z-index: 1000;
+  z-index: 800;
 }
 
 [data-tooltip]:hover::after,
