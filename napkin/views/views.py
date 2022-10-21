@@ -55,6 +55,7 @@ def route_alias(alias):
     url = list(urls.find({'alias': alias}))
     if url:
         alias = url[0]['destination']
+        print(alias)
         return redirect(alias)
 
 
