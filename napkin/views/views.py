@@ -1,5 +1,5 @@
 import sys
-from flask import Blueprint, request, jsonify, redirect, session, g, render_template
+from flask import Blueprint, request, jsonify, redirect, session, g, render_template, url_for
 import json
 import os
 from bson.objectid import ObjectId
@@ -55,8 +55,7 @@ def route_alias(alias):
     url = list(urls.find({'alias': alias}))
     if url:
         alias = url[0]['destination']
-        print(alias)
-        return redirect(alias)
+        return render_template('redirect.html', alias=alias)
 
 
 if __name__ == '__main__':
