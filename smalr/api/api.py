@@ -5,9 +5,9 @@ import os
 from bson.objectid import ObjectId
 import bcrypt 
 from datetime import date
-from napkin.api.models import Users as Users
+from smalr.api.models import Users as Users
 from database import database
-from napkin.utils import login_required
+from smalr.utils import login_required
 
 api = Blueprint('api', __name__)
 users = Users(database)

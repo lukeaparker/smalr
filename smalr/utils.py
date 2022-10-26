@@ -9,7 +9,7 @@ from pymongo import MongoClient
 from bson.objectid import ObjectId
 import bcrypt 
 from functools import wraps
-from napkin.api.models import Users as Users
+from smalr.api.models import Users as Users
 from database import database
 users = Users(database)
 
