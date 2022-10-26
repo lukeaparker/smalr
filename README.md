@@ -1,6 +1,6 @@
 ![alt text](https://cdn.onthezetacloud.com/StaticContent/media/530d9f8d-9196-4813-adf4-e0ed257b827e.gif)
 
-# Napkin
+# Smalr
 Smalr is a web bassed URL shortening tool. 
 
 # Web Setup 
